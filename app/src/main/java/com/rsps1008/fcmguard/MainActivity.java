@@ -128,7 +128,7 @@ public class MainActivity extends Activity {
             Shizuku.addRequestPermissionResultListener(shizukuPermissionListener);
         }
         updateShizukuAccessUi();
-        refreshStatus(null);
+        refreshStatus();
     }
 
     @Override protected void onResume() {
@@ -137,7 +137,7 @@ public class MainActivity extends Activity {
         nightUi.resume();
         alarmAllowListUi.render();
         reconcileProtectionService();
-        refreshStatus(null);
+        refreshStatus();
         updateShizukuAccessUi();
         if (fcmListExpanded && scannedFcmApps != null && !scannedFcmApps.isEmpty()) {
             renderFcmAppStatuses();
@@ -189,8 +189,10 @@ public class MainActivity extends Activity {
     }
 
     private void loadConfigIntoFields() {
-        keyEdit.setText(SettingsGuard.getConfiguredKey(this));
-        itemEdit.setText(SettingsGuard.getConfiguredRequiredItem(this));
+        String key = SettingsGuard.getConfiguredKey(this);
+        String item = SettingsGuard.getConfiguredRequiredItem(this);
+        if (!android.text.TextUtils.equals(keyEdit.getText(), key)) keyEdit.setText(key);
+        if (!android.text.TextUtils.equals(itemEdit.getText(), item)) itemEdit.setText(item);
     }
 
     private void setupLanguagePicker() {
@@ -277,7 +279,7 @@ public class MainActivity extends Activity {
                     suppressSwitchCallbacks = false;
                     toast(getString(R.string.permission_missing));
                     openWriteSettings();
-                    refreshStatus(null);
+                    refreshStatus();
                     return;
                 }
 
@@ -294,7 +296,7 @@ public class MainActivity extends Activity {
                 reconcileProtectionService();
                 toast(getString(R.string.service_stopped));
             }
-            refreshStatus(null);
+            refreshStatus();
         });
 
         notificationSwitch.setOnCheckedChangeListener((buttonView, checked) -> {
@@ -308,7 +310,7 @@ public class MainActivity extends Activity {
             }
             if (SettingsGuard.isProtectionEnabled(this) || NightFcmProtection.get(this).isEnabled()
                     || AlarmAllowListProtection.isAutoSyncEnabled(this)) startProtectionService();
-            refreshStatus(null);
+            refreshStatus();
         });
     }
 
@@ -319,7 +321,7 @@ public class MainActivity extends Activity {
             if (SettingsGuard.isProtectionEnabled(this) || NightFcmProtection.get(this).isEnabled()
                     || AlarmAllowListProtection.isAutoSyncEnabled(this)) startProtectionService();
             toast(getString(R.string.saved));
-            refreshStatus(getString(R.string.saved));
+            refreshStatus();
         });
 
         permissionBtn.setOnClickListener(v -> openWriteSettings());
@@ -328,13 +330,14 @@ public class MainActivity extends Activity {
             SettingsGuard.saveConfig(this, keyEdit.getText().toString(), itemEdit.getText().toString());
             SettingsGuard.Result result = SettingsGuard.repair(this);
             if (result.changed) FcmReconnect.kick(this);
-            refreshStatus(result.message);
+            toast(result.message);
+            refreshStatus();
         });
 
         findViewById(R.id.wakeBtn).setOnClickListener(v -> {
             FcmReconnect.kick(this);
             toast(getString(R.string.wake_sent));
-            refreshStatus(getString(R.string.wake_sent));
+            refreshStatus();
         });
 
         findViewById(R.id.diagBtn).setOnClickListener(v -> openFcmDiagnostics());
@@ -635,7 +638,7 @@ public class MainActivity extends Activity {
         if (AurogonProtection.hasSecureSettingsPermission(this)) {
             toast(getString(R.string.aurogon_secure_settings_granted));
             reconcileProtectionService();
-            refreshStatus(null);
+            refreshStatus();
             if (nightUi != null) nightUi.refresh();
             return;
         }
@@ -647,7 +650,7 @@ public class MainActivity extends Activity {
             boolean verified = success && AurogonProtection.hasSecureSettingsPermission(this);
             toast(verified ? getString(R.string.aurogon_secure_settings_granted)
                     : getString(R.string.aurogon_secure_settings_failed, detail));
-            refreshStatus(null);
+            refreshStatus();
             if (verified) reconcileProtectionService();
             if (nightUi != null) nightUi.refresh();
         });
@@ -657,7 +660,7 @@ public class MainActivity extends Activity {
         new Thread(() -> {
             AurogonProtection.ClearResult result = AurogonProtection.clearSettings(this);
             new Handler(Looper.getMainLooper()).post(() -> {
-                refreshStatus(null);
+                refreshStatus();
                 if (nightUi != null) nightUi.refresh();
                 callback.onComplete(result.verified, result.error);
             });
@@ -668,7 +671,7 @@ public class MainActivity extends Activity {
         new Thread(() -> {
             AurogonProtection.SyncOutcome result = AurogonProtection.syncCurrentAutostartApps(this);
             new Handler(Looper.getMainLooper()).post(() -> {
-                refreshStatus(null);
+                refreshStatus();
                 if (nightUi != null) nightUi.refresh();
                 callback.onComplete(result.verified, result.verified
                         ? String.valueOf(result.packageCount) : result.error);
@@ -774,7 +777,7 @@ public class MainActivity extends Activity {
         }
     }
 
-    private void refreshStatus(String firstLine) {
+    private void refreshStatus() {
         boolean canWrite = Settings.System.canWrite(this);
         boolean enabled = SettingsGuard.isProtectionEnabled(this);
         boolean notification = SettingsGuard.usePersistentNotification(this);
@@ -798,9 +801,6 @@ public class MainActivity extends Activity {
         }
 
         SpannableStringBuilder status = new SpannableStringBuilder();
-        if (firstLine != null && !firstLine.trim().isEmpty()) {
-            status.append("✓ ").append(firstLine).append("\n");
-        }
         appendStatusValueLine(
                 status,
                 canWrite ? getString(R.string.status_granted) : getString(R.string.status_not_granted),
@@ -851,24 +851,15 @@ public class MainActivity extends Activity {
                 nightEnabled ? R.color.status_value_green_bg : R.color.status_value_yellow_bg);
 
         statusText.setText(status);
-        currentValueText.setText(buildWhitelistValue(current));
+        CharSequence whitelistValue = buildWhitelistValue(current);
+        if (!android.text.TextUtils.equals(currentValueText.getText(), whitelistValue)) {
+            currentValueText.setText(whitelistValue);
+        }
         permissionBtn.setVisibility(canWrite ? View.GONE : View.VISIBLE);
         findViewById(R.id.permissionCard).setVisibility(canWrite ? View.GONE : View.VISIBLE);
     }
 
-    void refreshProtectionStatusCard() { refreshStatus(null); }
-
-    int dashboardScrollPosition() {
-        return findViewById(R.id.scroll).getScrollY();
-    }
-
-    void restoreDashboardScrollPosition(int scrollY) {
-        View scroll = findViewById(R.id.scroll);
-        scroll.post(() -> {
-            scroll.scrollTo(0, scrollY);
-            scroll.postOnAnimation(() -> scroll.scrollTo(0, scrollY));
-        });
-    }
+    void refreshProtectionStatusCard() { refreshStatus(); }
 
     private void appendStatusValueLine(SpannableStringBuilder out, String text, int backgroundColorRes) {
         int lineStart = out.length();

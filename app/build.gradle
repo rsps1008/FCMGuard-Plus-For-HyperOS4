@@ -17,8 +17,8 @@ android {
         // HyperOS accepts its private Settings.System key only on this legacy path.
         // Shizuku still requires minSdk 23; Gradle warns about the deliberate target/min gap.
         targetSdk 22
-        versionCode 32
-        versionName "1.6.2"
+        versionCode 33
+        versionName "1.6.3"
     }
 
     signingConfigs {

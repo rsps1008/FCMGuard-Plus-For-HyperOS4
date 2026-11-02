@@ -54,22 +54,25 @@ final class AlarmAllowListUi {
         binding = false;
         ((TextView) activity.findViewById(R.id.alarmListSummary))
                 .setText(AlarmAllowListProtection.summary(activity));
-        activity.findViewById(R.id.alarmListSyncNow).setEnabled(!running && Settings.System.canWrite(activity));
-        activity.findViewById(R.id.alarmListRestoreBuiltIns).setEnabled(!running && Settings.System.canWrite(activity));
+        boolean enabled = Settings.System.canWrite(activity);
+        for (int id : new int[] {R.id.alarmListSyncNow, R.id.alarmListRestoreBuiltIns}) {
+            View button = activity.findViewById(id);
+            button.setEnabled(enabled);
+            button.setClickable(enabled && !running);
+            button.setAlpha(running ? 0.5f : 1f);
+        }
         ((MainActivity) activity).refreshProtectionStatusCard();
     }
 
     private void syncNow() {
+        if (running) return;
         if (!Settings.System.canWrite(activity)) {
             Toast.makeText(activity, R.string.alarm_list_permission, Toast.LENGTH_LONG).show();
             openWriteSettings();
             return;
         }
-        MainActivity mainActivity = (MainActivity) activity;
-        int scrollY = mainActivity.dashboardScrollPosition();
         running = true;
         render();
-        mainActivity.restoreDashboardScrollPosition(scrollY);
         new Thread(() -> {
             AlarmAllowListProtection.SyncOutcome result =
                     AlarmAllowListProtection.syncCurrentAutostartApps(activity);
@@ -77,7 +80,6 @@ final class AlarmAllowListUi {
                 if (activity.isFinishing() || activity.isDestroyed()) return;
                 running = false;
                 render();
-                mainActivity.restoreDashboardScrollPosition(scrollY);
                 Toast.makeText(activity, result.verified
                         ? activity.getString(R.string.alarm_list_sync_done, result.packageCount)
                         : activity.getString(R.string.alarm_list_action_failed, result.error),
@@ -108,6 +110,7 @@ final class AlarmAllowListUi {
     }
 
     private void restoreBuiltIns() {
+        if (running) return;
         if (!Settings.System.canWrite(activity)) {
             Toast.makeText(activity, R.string.alarm_list_permission, Toast.LENGTH_LONG).show();
             openWriteSettings();

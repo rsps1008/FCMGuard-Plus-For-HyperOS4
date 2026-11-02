@@ -26,6 +26,8 @@ FCM Guard+ 是獨立的 Android App，重點是以一般 App 可用的系統設�
 - **自動保護**：監聽目標設定的變更；同時提供 30 分鐘的進程內檢查，服務停止或手機重開後能否恢復仍取決於 Android／HyperOS 排程與使用者設定。
 - **Aurogon FCM 防護**：選擇性管理 `Settings.Global.aurogon_enable` 中的 FCM 廣播規則，掃描符合條件的 FCM App，並保留非本功能管理的既有規則。需另外取得 `WRITE_SECURE_SETTINGS`；自動授權設定會在 App 內清楚引導。
 - **Aurogon 鬧鐘防護**：管理 `Settings.System.cloud_aurogon_alarm_allow_list`。同步時納入 GMS、符合條件的 FCM App，並保留 ROM 內建的三個套件與其他既有項目；可還原為只含內建項目的預設清單。
+- 手動同步 Aurogon 規則或鬧鐘清單時，程式不會主動將頁面捲回先前位置。
+- 儲存、修復與喚醒結果會以提示訊息顯示，不再增減上方狀態卡的內容行數。
 - **HyperOS 4 夜間防護（實驗性）**：管理 `com.miui.game.allowlist` 中與 GMS 有關的項目，降低特定中國版 HyperOS 4 夜間凍結路徑影響的機會。此設定可能全天有效，且會增加背景活動；停用時會依記錄的項目所有權清理。
 - **FCM App 助手**：依 FCM/GCM manifest 接收元件尋找可能使用 FCM 的 App，並在 ROM 允許時唯讀顯示 Xiaomi 自啟動狀態。無法確認時會顯示未知，不會猜測。
 - **可選自啟動控制**：使用者明確授權後，可透過 Shizuku 修改個別 App 的 Xiaomi 自啟動項目；一般掃描仍為唯讀。
@@ -39,7 +41,7 @@ FCM Guard+ 是獨立的 Android App，重點是以一般 App 可用的系統設�
 4. 只啟用你需要的 Aurogon 或夜間防護功能。Aurogon FCM 規則需先完成卡片中的權限設定；鬧鐘清單與夜間防護則需「修改系統設定」權限。
 5. 若只有單一 App 收訊延遲，另外檢查該 App 在 HyperOS 的自啟動、電池限制及通知設定。
 
-FCM Guard+ 的應用程式 ID 為 `com.rsps1008.fcmguard`。1.6.2 版的 versionCode 為 32。Android 會把不同應用程式 ID 視為不同 App，因此舊版權限和 App 內設定不會自動移轉。若要移除舊版，先關閉舊版夜間防護並完成其清理程序。
+FCM Guard+ 的應用程式 ID 為 `com.rsps1008.fcmguard`。1.6.3 版的 versionCode 為 33。Android 會把不同應用程式 ID 視為不同 App，因此舊版權限和 App 內設定不會自動移轉。若要移除舊版，先關閉舊版夜間防護並完成其清理程序。
 
 ## 各項設定的作用
 
