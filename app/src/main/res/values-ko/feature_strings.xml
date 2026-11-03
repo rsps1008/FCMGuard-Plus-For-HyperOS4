@@ -26,4 +26,9 @@
     <string name="theme_system">시스템</string>
     <string name="theme_light">라이트</string>
     <string name="theme_dark">다크</string>
+    <string name="about_title">정보 및 감사의 말</string>
+    <string name="about_privacy">개인정보 처리방침\nhttps://rsps1008.github.io/FCMGuard-Plus-For-HyperOS4/privacy-policy/</string>
+    <string name="about_project">개발자 GitHub 프로젝트\nhttps://github.com/rsps1008/FCMGuard-Plus-For-HyperOS4</string>
+    <string name="about_original_author">원작자: ReedGAOOO\nhttps://github.com/ReedGAOOO/FCMGuard-HyperOS</string>
+    <string name="about_research_contributor">연구 기여자: dingwen07\nhttps://github.com/dingwen07/hyperos-fcm-fix</string>
 </resources>

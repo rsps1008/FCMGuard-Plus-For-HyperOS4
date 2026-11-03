@@ -113,4 +113,18 @@
         </RadioGroup>
     </LinearLayout>
 
+    <LinearLayout
+        android:id="@+id/aboutCard"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="@drawable/card_bg"
+        android:layout_marginTop="@dimen/card_gap">
+        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/about_title" android:textColor="@color/text_primary" android:textSize="16sp" android:textStyle="bold" android:paddingBottom="5dp" />
+        <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:text="@string/about_privacy" android:textColor="@color/text_primary" android:textColorLink="@color/blue" android:textSize="13sp" android:paddingTop="8dp" android:autoLink="web" android:linksClickable="true" />
+        <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:text="@string/about_project" android:textColor="@color/text_primary" android:textColorLink="@color/blue" android:textSize="13sp" android:paddingTop="8dp" android:autoLink="web" android:linksClickable="true" />
+        <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:text="@string/about_original_author" android:textColor="@color/text_primary" android:textColorLink="@color/blue" android:textSize="13sp" android:paddingTop="8dp" android:autoLink="web" android:linksClickable="true" />
+        <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:text="@string/about_research_contributor" android:textColor="@color/text_primary" android:textColorLink="@color/blue" android:textSize="13sp" android:paddingTop="8dp" android:autoLink="web" android:linksClickable="true" />
+    </LinearLayout>
+
 </LinearLayout>

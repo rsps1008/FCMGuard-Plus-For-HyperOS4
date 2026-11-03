@@ -26,4 +26,9 @@
     <string name="theme_system">System</string>
     <string name="theme_light">Hell</string>
     <string name="theme_dark">Dunkel</string>
+    <string name="about_title">Info und Mitwirkende</string>
+    <string name="about_privacy">Datenschutzerklärung\nhttps://rsps1008.github.io/FCMGuard-Plus-For-HyperOS4/privacy-policy/</string>
+    <string name="about_project">Mein GitHub-Projekt\nhttps://github.com/rsps1008/FCMGuard-Plus-For-HyperOS4</string>
+    <string name="about_original_author">Originalautor: ReedGAOOO\nhttps://github.com/ReedGAOOO/FCMGuard-HyperOS</string>
+    <string name="about_research_contributor">Forschungsbeitrag: dingwen07\nhttps://github.com/dingwen07/hyperos-fcm-fix</string>
 </resources>

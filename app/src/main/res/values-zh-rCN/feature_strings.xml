@@ -40,4 +40,9 @@
     <string name="theme_system">跟随系统</string>
     <string name="theme_light">浅色</string>
     <string name="theme_dark">深色</string>
+    <string name="about_title">关于与致谢</string>
+    <string name="about_privacy">隐私权政策\nhttps://rsps1008.github.io/FCMGuard-Plus-For-HyperOS4/privacy-policy/</string>
+    <string name="about_project">我的 GitHub 项目\nhttps://github.com/rsps1008/FCMGuard-Plus-For-HyperOS4</string>
+    <string name="about_original_author">原作者 ReedGAOOO\nhttps://github.com/ReedGAOOO/FCMGuard-HyperOS</string>
+    <string name="about_research_contributor">项目研究贡献人 dingwen07\nhttps://github.com/dingwen07/hyperos-fcm-fix</string>
 </resources>
